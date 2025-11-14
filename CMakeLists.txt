@@ -110,28 +110,28 @@ if ((NOT SLANG_FORCE_FETCH) AND (DEFINED ENV{VULKAN_SDK}))
 			${_Slang_hint_library_search_paths})
 	mark_as_advanced(Slang_DEBUG_LIBRARY)
 
-	if((Slang_LIBRARY OR Slang_DEBUG_LIBRARY) AND NOT TARGET SlangCmake::slang)
-		add_library(SlangCmake::slang STATIC IMPORTED)
+	if((Slang_LIBRARY OR Slang_DEBUG_LIBRARY) AND NOT TARGET slang)
+		add_library(slang STATIC IMPORTED)
 
-		set_property(TARGET SlangCmake::slang
+		set_property(TARGET slang
 				PROPERTY
 				INTERFACE_INCLUDE_DIRECTORIES "${Slang_INCLUDE_DIR}")
 
 		if(Slang_LIBRARY)
-			set_property(TARGET SlangCmake::slang APPEND
+			set_property(TARGET slang APPEND
 					PROPERTY
 					IMPORTED_CONFIGURATIONS Release)
-			set_property(TARGET SlangCmake::slang
+			set_property(TARGET slang
 					PROPERTY
 					IMPORTED_LOCATION_RELEASE "${Slang_LIBRARY}")
 			message(STATUS "Found Slang Release Mode.")
 		endif()
 
 		if(Slang_DEBUG_LIBRARY)
-			set_property(TARGET SlangCmake::slang APPEND
+			set_property(TARGET slang APPEND
 					PROPERTY
 					IMPORTED_CONFIGURATIONS Debug)
-			set_property(TARGET SlangCmake::slang
+			set_property(TARGET slang
 					PROPERTY
 					IMPORTED_LOCATION_DEBUG "${Slang_DEBUG_LIBRARY}")
 			message(STATUS "Found Slang Debug Mode.")
@@ -139,7 +139,7 @@ if ((NOT SLANG_FORCE_FETCH) AND (DEFINED ENV{VULKAN_SDK}))
 
 		if(UNIX)
 			find_package(Threads REQUIRED)
-			target_link_libraries(SlangCmake::slang
+			target_link_libraries(slang
 					INTERFACE
 					Threads::Threads)
 		endif()
@@ -147,7 +147,7 @@ if ((NOT SLANG_FORCE_FETCH) AND (DEFINED ENV{VULKAN_SDK}))
 
 endif ()
 
-if (NOT TARGET SlangCmake::slang)
+if (NOT TARGET slang)
 	if(NOT SLANG_FORCE_FETCH)
 		message(WARNING "Slang Not found, fetch from the repository \"${SLANG_GIT_REPOSITORY}\" at tag \"${SLANG_GIT_TAG}\"")
 	endif()
@@ -168,9 +168,7 @@ if (NOT TARGET SlangCmake::slang)
 			PATCH_COMMAND git apply ${CMAKE_CURRENT_SOURCE_DIR}/slang-imgui.patch
 	)
 	FetchContent_MakeAvailable(slang)
-
-	add_library(SlangCmake::slang ALIAS slang)
-	message(STATUS "Library \"SlangCmake::slang\" created.")
-else ()
-	message(STATUS "Library \"SlangCmake::slang\" created.")
 endif ()
+
+add_library(SlangCmake::slang ALIAS slang)
+message(STATUS "Library \"SlangCmake::slang\" created.")
